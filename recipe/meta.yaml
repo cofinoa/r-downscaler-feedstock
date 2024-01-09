@@ -1,14 +1,17 @@
 {% set version = "3.3.4" %}
 {% set posix = 'm2-' if win else '' %}
 {% set native = 'm2w64-' if win else '' %}
+{% set envfile = load_file_data('inst/environment.yml') %}
 
 package:
   name: r-downscaler
   version: {{ version|replace("-", "_") }}
 
 source:
-  url: https://github.com/SantanderMetGroup/downscaleR/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: ff4b7016e177abf453e5326eac32d31bb8b8c85e4ee36bcbc3c01b7abf303e80
+  url: https://api.github.com/repos/SantanderMetGroup/downscaleR/tarball/b89b11cc0ff6117a86203edb1ce67c6717675e1c
+  fn: downscaleR.tar.gz
+  #url: https://github.com/SantanderMetGroup/downscaleR/archive/refs/tags/v{{ version }}.tar.gz
+  #sha256: ff4b7016e177abf453e5326eac32d31bb8b8c85e4ee36bcbc3c01b7abf303e80
 
 build:
   merge_build_host: true  # [win]
@@ -50,6 +53,10 @@ requirements:
     - r-reticulate
     - r-sticky
     - r-transformer >=2.0.1
+  {% for dep in envfile['dependencies']%}
+    - {{ dep }}
+  {% endfor %}
+
 
 test:
   commands:
